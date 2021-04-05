@@ -1,1 +1,1 @@
-web: make run-prod
+python -m http.server
