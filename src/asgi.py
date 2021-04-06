@@ -4,7 +4,9 @@ from typing import Optional
 from fastapi import FastAPI
 from pydantic import Field
 from pydantic.main import BaseModel
+from dotenv import load_dotenv
 
+load_dotenv()
 app = FastAPI()
 
 
