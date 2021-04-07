@@ -28,5 +28,5 @@ def test_status_heroku():
     response = client.get("https://tel-bot-z43.herokuapp.com/config/")
     assert response.status_code == status.HTTP_200_OK
     payload = response.json()
-    data = {"bot_token": os.getenv('BOT_TOKEN'), "pythonpath": os.getenv('PYTHONPATH')}
+    data = {"bot_token": TOKEN, "pythonpath": PATH}
     assert payload == data
