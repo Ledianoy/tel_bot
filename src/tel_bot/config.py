@@ -1,4 +1,3 @@
-
 from pydantic import BaseSettings
 from pydantic import Field
 
@@ -13,14 +12,8 @@ class Settings(BaseSettings):
         case_sensitive = True
         env_file = ".env"
         env_file_encoding = "utf-8"
-        fields = {
-            "from_": "from",
-        }
 
+class Pass(BaseSettings):
+    password: str
 
 settings: Settings = Settings()
-
-if __name__ == "__main__":
-    from tel_bot.util import debug
-
-    debug(settings)
