@@ -14,3 +14,5 @@ app = FastAPI()
 async def handle_settings():
     debug(settings)
     return settings
+
+
