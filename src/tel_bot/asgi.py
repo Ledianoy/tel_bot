@@ -29,7 +29,7 @@ async def getWebhookInfo():
 async def index():
     data = await getWebhookInfo()
     url = data["url"]
-    with open("index.html", "r", encoding='utf-8') as f:
+    with open("src/index.html", "r", encoding='utf-8') as f:
         text = f.read()
     return HTMLResponse(text.format(value=url))
 
