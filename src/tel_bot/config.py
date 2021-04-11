@@ -7,6 +7,9 @@ class Settings(BaseSettings):
     debug: bool = Field(env="DEBUG", default=False)
     python_path: str = Field(..., env="PYTHONPATH")
     service_url: str = Field(..., env="SERVICE_URL")
+    url: str = Field(default="url")
+    url_telega: str = Field(..., env="TELEGA_URL")
+
 
     class Config:
         case_sensitive = True

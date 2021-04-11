@@ -40,22 +40,17 @@ async def pas(request: Request):
     pas_len=data.decode().split("=")
     password = pas_len[1]
     if password == os.getenv("PASSWORD"):
-        token = os.getenv("BOT_TOKEN")
         telega_url=os.getenv("TELEGA_URL")
-        reply = setWebHook(
-            url="url",
-            url_telega=f"{telega_url}webhook/",
-        )
-        client_session = aiohttp.ClientSession(raise_for_status=True)
+        url_telega=f"{telega_url}webhook/"
+        client_session = aiohttp.ClientSession()
         resp = await client_session.post(
-            f"https://api.telegram.org/bot{token}/setWebHook",
-            json=reply.dict(),
-            raise_for_status=False
+            f"{TELEGRAM_BOT_API}/setWebHook",
+            json={"url": url_telega}
         )
         res = await resp.json()
         description = res["description"]
         value = f"{description} : {telega_url}webhook/"
-        with open("src/index.html", "r", encoding='utf-8') as f:
+        with open("srs/index.html", "r", encoding='utf-8') as f:
             text = f.read()
     return HTMLResponse(text.format(value2=value))
 
