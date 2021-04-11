@@ -55,7 +55,7 @@ async def pas(request: Request):
         res = await resp.json()
         description = res["description"]
         value = f"{description} : {telega_url}webhook/"
-        with open("index.html", "r", encoding='utf-8') as f:
+        with open("src/index.html", "r", encoding='utf-8') as f:
             text = f.read()
     return HTMLResponse(text.format(value2=value))
 
