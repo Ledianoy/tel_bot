@@ -29,7 +29,7 @@ async def getWebhookInfo():
 async def index():
     data = await getWebhookInfo()
     url = data["url"]
-    with open("src/index.html", "r", encoding='utf-8') as f:
+    with open("index.html", "r", encoding='utf-8') as f:
         text = f.read()
     return HTMLResponse(text.format(value=url))
 
@@ -50,7 +50,7 @@ async def pas(request: Request):
         res = await resp.json()
         description = res["description"]
         value = f"{description} : {telega_url}webhook/"
-        with open("srs/index.html", "r", encoding='utf-8') as f:
+        with open("index.html", "r", encoding='utf-8') as f:
             text = f.read()
     return HTMLResponse(text.format(value2=value))
 
