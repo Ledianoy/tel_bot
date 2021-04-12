@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 from starlette.templating import Jinja2Templates
 
 from tel_bot.config import settings
-from tel_bot.dirs import DIR_TEMPLATES
 from tel_bot.telegram.types import Update, SendMessage
 from tel_bot.util import debug
 
