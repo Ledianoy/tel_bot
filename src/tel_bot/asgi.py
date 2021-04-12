@@ -1,20 +1,22 @@
-from random import random, randint
+from random import randint
 
 import aiohttp
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 import os
 from dotenv import load_dotenv
+from starlette.templating import Jinja2Templates
 
-from tel_bot import telegram
 from tel_bot.config import settings
-from tel_bot.telegram.types import Update, SendMessage, setWebHook
+from tel_bot.dirs import DIR_TEMPLATES
+from tel_bot.telegram.types import Update, SendMessage
 from tel_bot.util import debug
+
 
 TELEGRAM_BOT_API = f"https://api.telegram.org/bot{settings.bot_token}"
 load_dotenv()
-
 app = FastAPI()
+templates = Jinja2Templates(directory="templates")
 
 async def getWebhookInfo():
     token = os.getenv("BOT_TOKEN")
@@ -25,17 +27,24 @@ async def getWebhookInfo():
     return url
 
 
-@app.get("/")
-async def index():
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request,):
     data = await getWebhookInfo()
     url = data["url"]
-    with open("index.html", "r", encoding='utf-8') as f:
-        text = f.read()
-    return HTMLResponse(text.format(value=url))
+    # path = f"{settings.python_path}\index.html"
+    # with open(path, "r") as f:
+    #     text = f.read()
+
+    context = {"value" : url}
+    response = templates.TemplateResponse(
+        "index.html", {"request": request, **context}
+    )
+
+    return response
 
 
-@app.post("/")
-async def pas(request: Request):
+@app.post("/", response_class=HTMLResponse)
+async def pas(request: Request,):
     data = await request.body()
     pas_len=data.decode().split("=")
     password = pas_len[1]
@@ -50,10 +59,12 @@ async def pas(request: Request):
         res = await resp.json()
         description = res["description"]
         value = f"{description} : {telega_url}webhook/"
-        with open("index.html", "r", encoding='utf-8') as f:
-            text = f.read()
-    return HTMLResponse(text.format(value2=value))
+        context = {"value2": value}
+        response = templates.TemplateResponse(
+            "index.html", {"request": request, **context}
+        )
 
+        return response
 
 
 @app.get("/settings/")
