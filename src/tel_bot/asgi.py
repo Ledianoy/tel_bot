@@ -16,7 +16,7 @@ from tel_bot.util import debug
 TELEGRAM_BOT_API = f"https://api.telegram.org/bot{settings.bot_token}"
 load_dotenv()
 app = FastAPI()
-templates = Jinja2Templates(directory="templates")
+templates = Jinja2Templates(directory=settings.index_path)
 
 async def getWebhookInfo():
     token = os.getenv("BOT_TOKEN")
@@ -31,10 +31,6 @@ async def getWebhookInfo():
 async def index(request: Request,):
     data = await getWebhookInfo()
     url = data["url"]
-    # path = f"{settings.python_path}\index.html"
-    # with open(path, "r") as f:
-    #     text = f.read()
-
     context = {"value" : url}
     response = templates.TemplateResponse(
         "index.html", {"request": request, **context}

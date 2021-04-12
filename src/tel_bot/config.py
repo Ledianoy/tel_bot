@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     service_url: str = Field(..., env="SERVICE_URL")
     url: str = Field(default="url")
     url_telega: str = Field(..., env="TELEGA_URL")
+    index_path: str = Field(..., env="INDEX_PATH")
 
 
     class Config:
