@@ -102,7 +102,7 @@ async def tg_webhook(update: Update):
             return {"ok": True}
 
 
-@app.post("/webhook/blog")
+@app.post("/webhook/blog/")
 async def tg_webhook(update: Update):
         try:
 
