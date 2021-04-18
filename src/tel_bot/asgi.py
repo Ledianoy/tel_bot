@@ -102,6 +102,21 @@ async def tg_webhook(update: Update):
             return {"ok": True}
 
 
+@app.post("/webhook/blog")
+async def tg_webhook(update: Update):
+        try:
+
+            reply = SendMessage(
+                chat_id=update.message.chat.id,
+                text="Работает",
+            )
+            url = f"{TELEGRAM_BOT_API}/SendMessage"
+            async with aiohttp.ClientSession() as session:
+                 async with session.post(url, json=reply.dict()) as response:
+                    payload = await response
+                    debug(response)
+        finally:
+            return {"ok": True}
 
 
 
