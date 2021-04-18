@@ -63,3 +63,10 @@ class setWebHook(BaseModel):
     url: str
     url_telega: str
 
+class Baseuser(BaseModel):
+    id: int
+    user_id: int
+    blog_user_id: Optional[int] = Field(None)
+    blog_user_name: Optional[str] = Field(None)
+    user_status: Optional[int] = Field(None)
+

@@ -1,6 +1,8 @@
+import enum
 from random import randint
-
+import asyncpg
 import aiohttp
+from fastapi import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 import os
@@ -8,7 +10,8 @@ from dotenv import load_dotenv
 from starlette.templating import Jinja2Templates
 
 from tel_bot.config import settings
-from tel_bot.telegram.types import Update, SendMessage
+from tel_bot.logic import blog
+from tel_bot.telegram.types import Update, SendMessage, Baseuser
 from tel_bot.util import debug
 
 
@@ -67,27 +70,57 @@ async def handle_settings():
     debug(settings)
     return settings
 
+@enum.unique
+class UserStatus(enum.Enum):
+    WATING_FOR_USERNAME = 1
+
 
 @app.post("/webhook/")
 async def tg_webhook(update: Update):
-    try:
-        text ={
-            1: "Привет",
-            2:"Hello",
-            3:"Здравейте",
-            4:"Aloha",
-            5:"Прывiтанне"
-        }
-        x= randint(1, 5)
-        reply = SendMessage(
-            chat_id=update.message.chat.id,
-            text=text[x],
-        )
-        url = f"{TELEGRAM_BOT_API}/SendMessage"
-        async with aiohttp.ClientSession() as session:
-             async with session.post(url, json=reply.dict()) as response:
-                payload = await response
-                debug(response)
-    finally:
-        return {"ok": True}
+    if update.message.text == "/blog":
+        text = blog(update)
+    else:
+        try:
+            text ={
+                1: "Привет",
+                2:"Hello",
+                3:"Здравейте",
+                4:"Aloha",
+                5:"Прывiтанне"
+            }
+            x= randint(1, 5)
+            reply = SendMessage(
+                chat_id=update.message.chat.id,
+                text=text[x],
+            )
+            url = f"{TELEGRAM_BOT_API}/SendMessage"
+            async with aiohttp.ClientSession() as session:
+                 async with session.post(url, json=reply.dict()) as response:
+                    payload = await response
+                    debug(response)
+        finally:
+            return {"ok": True}
 
+
+
+
+
+
+@app.post("/xxxxx/{user_id}/")
+async def xxx(user_id: int = Path(...)):
+    conn = await asyncpg.connect(dsn=settings.database_url)
+    try:
+        values = await conn.fetch(
+            'select * from users where id = $1',
+            user_id,
+        )
+        debug(values)
+
+        values2 = [
+            Baseuser.parse_obj(obj)
+            for obj in values
+        ]
+
+        return values2
+    finally:
+        await conn.close()

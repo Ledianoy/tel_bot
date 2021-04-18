@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     url: str = Field(default="url")
     url_telega: str = Field(..., env="TELEGA_URL")
     index_path: str = Field(..., env="INDEX_PATH")
+    database_url: str = Field(..., env="DATABASE_URL")
 
 
     class Config:
